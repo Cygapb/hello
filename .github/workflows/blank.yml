@@ -29,7 +29,25 @@ jobs:
       - name: Run a one-line script
         run: mvn -B package --file pom.xml
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: ls -l
-          
+ # Setup gcloud CLI
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: '290.0.1'
+        service_account_key: ${{ secrets.RUN_SA_KEY }}
+        project_id: ${{ secrets.RUN_PROJECT }}
+
+   # Build and push image to Google Container Registry
+    - name: Build
+      run: |-
+        gcloud builds submit \
+          --quiet \
+          --tag "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
+    # Deploy image to Cloud Run
+    - name: Deploy
+      run: |-
+        gcloud run deploy "$SERVICE_NAME" \
+          --quiet \
+          --region "$RUN_REGION" \
+          --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
+          --platform "managed" \
+          --allow-unauthenticated
