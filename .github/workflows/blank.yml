@@ -15,10 +15,6 @@ env:
   RUN_SA_KEY: ${{ secrets.GCP_SA_KEY }}
   RUN_REGION: us-central1
   SERVICE_NAME: helloworld
-  # CLOUDSDK_CORE_PROJECT: ${{ secrets.CLOUDSDK_CORE_PROJECT }} 
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -40,13 +36,9 @@ jobs:
       - uses: google-github-actions/setup-gcloud@master
         with:
           project_id: ${{ secrets.RUN_PROJECT }}
-          service_account_key: ${{ secrets.RUN_SA_KEY }}
-      
-      # Reset your current project
-      - name: set project
-        run: gcloud config set project $RUN_PROJECT
-        
-   # Build and push image to Google Container Registry
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+             
+ # Build and push image to Google Container Registry
       - name: Build
         run: |-
           gcloud builds submit \
