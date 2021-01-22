@@ -15,6 +15,7 @@ env:
   RUN_SA_KEY: ${{ secrets.GCP_SA_KEY }}
   RUN_REGION: us-central1
   SERVICE_NAME: helloworld
+  CLOUDSDK_CORE_PROJECT: ${{ secrets.CLOUDSDK_CORE_PROJECT }} 
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -48,7 +49,7 @@ jobs:
           gcloud builds submit \
             --quiet \
             --tag "gcr.io/$RUN_PROJECT/$SERVICE_NAME:$GITHUB_SHA"
-            --project ${{ secrets.RUN_PROJECT }}
+            --project ${{ secrets.CLOUDSDK_CORE_PROJECT }}
 
     # Deploy image to Cloud Run
       - name: Deploy
