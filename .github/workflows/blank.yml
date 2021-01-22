@@ -44,7 +44,7 @@ jobs:
       
       # Reset your current project
       - name: set project
-        run: gcloud config set project ${{ secrets.RUN_PROJECT }}
+        run: gcloud config set project GitHub-Action
         
    # Build and push image to Google Container Registry
       - name: Build
