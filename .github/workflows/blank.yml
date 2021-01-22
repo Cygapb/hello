@@ -45,7 +45,6 @@ jobs:
           gcloud builds submit \
             --quiet \
             --tag "gcr.io/$RUN_PROJECT/$SERVICE_NAME:$GITHUB_SHA"
-            --project=hello
 
     # Deploy image to Cloud Run
       - name: Deploy
