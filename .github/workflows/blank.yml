@@ -57,3 +57,4 @@ jobs:
             --image "gcr.io/$RUN_PROJECT/$SERVICE_NAME:$GITHUB_SHA" \
             --platform "managed" \
             --allow-unauthenticated
+            --project ${{ secrets.RUN_PROJECT }}
