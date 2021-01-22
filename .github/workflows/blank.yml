@@ -15,7 +15,7 @@ env:
   RUN_SA_KEY: ${{ secrets.GCP_SA_KEY }}
   RUN_REGION: us-central1
   SERVICE_NAME: helloworld
-  CLOUDSDK_CORE_PROJECT: ${{ secrets.CLOUDSDK_CORE_PROJECT }} 
+  # CLOUDSDK_CORE_PROJECT: ${{ secrets.CLOUDSDK_CORE_PROJECT }} 
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -37,9 +37,8 @@ jobs:
         run: mvn -B package --file pom.xml
 
  # Setup gcloud CLI
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      - uses: google-github-actions/setup-gcloud@master
         with:
-          version: '290.0.1'
           service_account_key: ${{ secrets.RUN_SA_KEY }}
           project_id: ${{ secrets.RUN_PROJECT }}
 
