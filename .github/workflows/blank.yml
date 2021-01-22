@@ -48,6 +48,8 @@ jobs:
           gcloud builds submit \
             --quiet \
             --tag "gcr.io/$RUN_PROJECT/$SERVICE_NAME:$GITHUB_SHA"
+            --project ${{ secrets.RUN_PROJECT }}
+
     # Deploy image to Cloud Run
       - name: Deploy
         run: |-
@@ -57,4 +59,4 @@ jobs:
             --image "gcr.io/$RUN_PROJECT/$SERVICE_NAME:$GITHUB_SHA" \
             --platform "managed" \
             --allow-unauthenticated
-            --project ${{ secrets.RUN_PROJECT }}
+            
