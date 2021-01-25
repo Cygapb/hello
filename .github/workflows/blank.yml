@@ -42,9 +42,9 @@ jobs:
  # Build and push image to Google Container Registry
       - name: Build
         run: |-
-          gcloud builds submit \
+          gcloud builds submit --config cloudbuild.yaml .
            # --quiet \
-            --tag "gcr.io/$RUN_PROJECT/$SERVICE_NAME:$GITHUB_SHA"
+          # --tag "gcr.io/$RUN_PROJECT/$SERVICE_NAME:$GITHUB_SHA"
 
     # Deploy image to Cloud Run
       - name: Deploy
