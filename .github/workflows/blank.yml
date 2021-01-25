@@ -43,7 +43,6 @@ jobs:
       - name: Build
         run: |-
           gcloud builds submit \
-            --gcs-source-staging-dir=/tmp
             --quiet \
             --tag "gcr.io/$RUN_PROJECT/$SERVICE_NAME:$GITHUB_SHA"
 
