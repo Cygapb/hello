@@ -1,5 +1,5 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/$RUN_PROJECT/$SERVICE_NAME:$GITHUB_SHA', '.']
-  images:
+images:
 - 'gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA'
