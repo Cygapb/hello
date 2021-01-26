@@ -53,19 +53,12 @@ jobs:
             --build-arg GITHUB_REF="$GITHUB_REF" \
           .
 
-#   # Build and push image to Google Container Registry
-      - name: Build
-        run: |-
-          gcloud builds submit \
-            --quiet \
-            --tag "gcr.io/$RUN_PROJECT/$SERVICE_NAME:$GITHUB_SHA"
-           
  # Deploy image to Cloud Run
       - name: Deploy
         run: |-
           gcloud run deploy "$SERVICE_NAME" \
             --quiet \
             --region "$RUN_REGION" \
-            --image "gcr.io/$RUN_PROJECT/$SERVICE_NAME:$GITHUB_SHA" \
+            --tag "gcr.io/$RUN_PROJECT/$GITHUB_SHA" \
             --platform "managed" \
             --allow-unauthenticated
