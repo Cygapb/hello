@@ -40,6 +40,10 @@ jobs:
         with:
           project_id: ${{ secrets.RUN_PROJECT }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
+          
+ # Compile java code
+      - name: Compile
+        run: javac HelloWorld.java
              
       - name: Build
         run: |-
@@ -53,6 +57,7 @@ jobs:
       - name: Publish
         run: |-
           docker push "gcr.io/$RUN_PROJECT/$IMAGE:$GITHUB_SHA"
+          
 
     # Set up kustomize
       - name: Set up Kustomize
