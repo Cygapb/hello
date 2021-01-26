@@ -20,6 +20,7 @@ env:
   DEPLOYMENT_NAME: gke-test 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
 jobs:
   # This workflow contains a single job called "build"
   build:
@@ -41,6 +42,10 @@ jobs:
           project_id: ${{ secrets.RUN_PROJECT }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           
+ # Configure docker to use the gcloud command-line tool as a credential helper
+      - run: |-
+          gcloud --quiet auth configure-docker
+          
  # Compile java code
       - name: Compile
         run: javac HelloWorld.java
@@ -48,17 +53,26 @@ jobs:
       - name: Build
         run: |-
           docker build \
-            --tag "gcr.io/$RUN_PROJECT/$GITHUB_SHA" \
+            --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
           .
 
- # Deploy image to Cloud Run
+    # Push the Docker image to Google Container Registry
+      - name: Publish
+        run: |-
+          docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+
+    # Set up kustomize
+      - name: Set up Kustomize
+        run: |-
+          curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+          chmod u+x ./kustomize
+
+    # Deploy the Docker image to the GKE cluster
       - name: Deploy
         run: |-
-          gcloud run deploy "$SERVICE_NAME" \
-            --quiet \
-            --region "$RUN_REGION" \
-            --tag "gcr.io/$RUN_PROJECT/$GITHUB_SHA" \
-            --platform "managed" \
-            --allow-unauthenticated
+          ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
+          ./kustomize build . | kubectl apply -f -
+          kubectl rollout status deployment/$DEPLOYMENT_NAME
+          kubectl get services -o wide
