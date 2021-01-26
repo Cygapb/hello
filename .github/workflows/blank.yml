@@ -64,7 +64,7 @@ jobs:
 #Deploying container in GKE cluster
       - name: Deploying container in GKE cluster
         run: |-
-          gcloud config set project GitHub-Action
+          gcloud config set project $RUN_PROJECT
           gcloud config set compute/zone us-central1-a
 
     ## Creating a GKE cluster
