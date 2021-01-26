@@ -16,7 +16,7 @@ env:
   RUN_REGION: us-central1
   SERVICE_NAME: helloworld
   CLOUDSDK_CORE_PROJECT: "github-action-302303"
- # IMAGE: static-site
+  IMAGE: static-site
   DEPLOYMENT_NAME: gke-test 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
