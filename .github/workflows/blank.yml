@@ -70,7 +70,7 @@ jobs:
     ## Creating a GKE cluster
       - name: Creating a GKE cluster
         run: |-
-          gcloud container clusters create gk-cluster --num-nodes=1
+          gcloud container clusters create gk-cluster --num-nodes=1 --machine-type=e2-standard-4
           gcloud container clusters get-credentials gk-cluster
       
       #Creating deployment
